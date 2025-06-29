@@ -12,13 +12,22 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/
 import LearnPage from './pages/Learn';
 import Profile from './pages/Profile';
 import AuthButton from './components/AuthButton';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import PlayPage from './pages/Play';
+import SettingsPage from './pages/Settings'
+import IssuesPage from './pages/Issues'
+import LeaderboardPage from './pages/Leaderboard';
+import {lessonReducer} from './state/lessons'
 
-const Tab = createDrawerNavigator();
-const SideBar = createDrawerNavigator();
+
+const Tab = createBottomTabNavigator();
+const Tab2 = createBottomTabNavigator();
 
 const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
+    lesson: lessonReducer
   }
 });
 
@@ -34,7 +43,7 @@ function CustomDrawerContent(props) {
 
 function AuthDrawer() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{ tabBarStyle: { display: 'none' } }}>
       <Tab.Screen name="Home" component={HomePage} options={{ headerShown: false }} />
       <Tab.Screen name="Register" component={RegisterPage} options={{ headerShown: false }} />
       <Tab.Screen name="LogIn" component={LoginPage} options={{ headerShown: false }} />
@@ -44,22 +53,51 @@ function AuthDrawer() {
 
 function MainNavigator() {
   return (
-    <SideBar.Navigator 
-      screenOptions={{
-    headerStyle: {
-      backgroundColor: '#4169E1',  // nav bar background color
-    },
-    headerTintColor: '#FFFFFF',     // color for text & icons in the nav bar
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }}
-    drawerContent={props => <CustomDrawerContent {...props} 
-    />}>
-      {/* <SideBar.Screen options={{ headerTitle: '' }} name="Profile" component={Profile} /> */}
-      <SideBar.Screen options={{ headerTitle: '' }} name="Learn" component={LearnPage} />
-      <SideBar.Screen options={{ headerTitle: '' }} name="Bills" component={BillsPage} />
-    </SideBar.Navigator>
+    <Tab2.Navigator initialRouteName='Learn' 
+            screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            switch (route.name) {
+              case 'Learn':
+                iconName = focused ? 'book' : 'book-outline';
+                break;
+              case 'Play':
+                iconName = focused ? 'game-controller' : 'game-controller-outline';
+                break;
+              case 'Profile':
+                iconName = focused ? 'person' : 'person-outline';
+                break;
+              case 'Settings':
+                iconName = focused ? 'settings' : 'settings-outline';
+                break;
+              case 'Issues':
+                iconName = focused ? 'megaphone' : 'megaphone-outline';
+                break;
+              case 'Leaderboard':
+                iconName = focused ? 'trophy' : 'trophy-outline';
+                break;
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'white',
+          tabBarInactiveTintColor: 'rgba(255,255,255,0.6)',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#4169E1', // Example: dark slate
+            borderTopWidth: 0,
+          },
+        })}
+    >
+      <Tab2.Screen name="Learn" component={LearnPage} />
+      <Tab2.Screen name="Profile" component={Profile} />
+      <Tab2.Screen name="Play" component={PlayPage} />
+      <Tab2.Screen name="Issues" component={IssuesPage} />
+      <Tab2.Screen name="Leaderboard" component={LeaderboardPage} />
+      <Tab2.Screen name="Settings" component={SettingsPage} />
+    </Tab2.Navigator>
   );
 }
 
