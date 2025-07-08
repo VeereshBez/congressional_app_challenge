@@ -19,15 +19,22 @@ import SettingsPage from './pages/Settings'
 import IssuesPage from './pages/Issues'
 import LeaderboardPage from './pages/Leaderboard';
 import {lessonReducer} from './state/lessons'
+import ReportProblemPage from './pages/ReportProblem';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { problemReducer } from './state/problems';
+import IssueDescription from './pages/IssueDescription';
 
 
 const Tab = createBottomTabNavigator();
 const Tab2 = createBottomTabNavigator();
 
+const Stack = createNativeStackNavigator()
+
 const store = configureStore({
   reducer: {
     user: userReducer,
-    lesson: lessonReducer
+    lesson: lessonReducer,
+    problems: problemReducer
   }
 });
 
@@ -53,7 +60,7 @@ function AuthDrawer() {
 
 function MainNavigator() {
   return (
-    <Tab2.Navigator initialRouteName='Learn' 
+    <Tab2.Navigator initialRouteName='Issues' 
             screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -91,10 +98,10 @@ function MainNavigator() {
           },
         })}
     >
+      <Tab2.Screen name="Issues" component={IssuesPage} />
       <Tab2.Screen name="Learn" component={LearnPage} />
       <Tab2.Screen name="Profile" component={Profile} />
       <Tab2.Screen name="Play" component={PlayPage} />
-      <Tab2.Screen name="Issues" component={IssuesPage} />
       <Tab2.Screen name="Leaderboard" component={LeaderboardPage} />
       <Tab2.Screen name="Settings" component={SettingsPage} />
     </Tab2.Navigator>
@@ -103,7 +110,23 @@ function MainNavigator() {
 
 function AppNavigator() {
   const isLogged = useSelector(state => state.user.isLoggedIn);
-  return isLogged ? <MainNavigator /> : <AuthDrawer />;
+  return isLogged ? <Stack.Navigator screenOptions={{
+        headerStyle: {
+          backgroundColor: '#4169E1', // header background color
+        },
+        headerTintColor: '#fff', // header text and icon color
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
+    <Stack.Screen name="Tabs" component={MainNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="ReportProblem"   options={{
+    headerTitle: '', // Hides the title
+    headerBackTitleVisible: false, // Optional: hides text label next to back button (iOS only)
+  }} component={ReportProblemPage} />
+    <Stack.Screen name="IssueDescription" component={IssueDescription} options={{    headerTitle: '', // Hides the title
+    headerBackTitleVisible: false, }} />
+    </Stack.Navigator> : <AuthDrawer />;
 }
 
 export default function App() {
