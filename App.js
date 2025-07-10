@@ -20,6 +20,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { problemReducer } from './state/problems';
 import IssueDescription from './pages/IssueDescription';
 import { chaptersReducer } from './state/chapter';
+import CommentsPage from './pages/CommentsPage';
 
 
 const Tab = createBottomTabNavigator();
@@ -120,6 +121,8 @@ function AppNavigator() {
   }} component={ReportProblemPage} />
   {/* <Stack.Screen name='ContentPage' options={{headerTitle: '', headerBackVisible: false}} component={ContentPage} /> */}
     <Stack.Screen name="IssueDescription" component={IssueDescription} options={{    headerTitle: '', // Hides the title
+    headerBackTitleVisible: false, }} />
+    <Stack.Screen name="CommentsPage" component={CommentsPage} options={{    headerTitle: '', // Hides the title
     headerBackTitleVisible: false, }} />
     </Stack.Navigator> : <AuthDrawer />;
 }
