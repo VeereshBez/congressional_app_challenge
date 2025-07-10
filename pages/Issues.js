@@ -34,7 +34,7 @@ export default function IssuesPage({navigation}) {
     }, [])
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('ReportProblem')} title="Report A Problem" />
             <View style={{alignItems: 'center', flex: 1, padding: 20}}>
                 <FlatList
@@ -52,7 +52,7 @@ export default function IssuesPage({navigation}) {
                                 {item.annoymous ? 'This issue was submitted anonymously' : `This issue was submitted by ${item.username}`}
                                 </Text>
                                 <Text>{item.date.slice(0, 24)}</Text>
-                                <Text>{item.description}</Text>
+                                <Text style={{marginTop: 20}}>{item.description.slice(0, 100)}...</Text>
                                 <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('IssueDescription', {...item})}>
                                     <Text style={{color: 'white',  textAlign: 'center', fontWeight: 'bold'}}>View More</Text>
                                 </TouchableOpacity>

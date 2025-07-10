@@ -49,7 +49,8 @@ export default function ReportProblemPage() {
             date: String(date),
             photos: urls,
             userId: user.userId,
-            username: user.username
+            username: user.username,
+            likes: []
         }
 
         try {

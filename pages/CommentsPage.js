@@ -18,7 +18,7 @@ export default function CommentsPage({route}) {
                     text: comment, 
                     postId: id,
                     userId: user.userId,
-                    username: 'Veeresh',
+                    username: user.username,
                     date: serverTimestamp()
                 }
                 const commentsCollection = collection(db, "comments")
@@ -55,6 +55,7 @@ export default function CommentsPage({route}) {
 <View style={{ flex: 1, backgroundColor: 'white' }}>
     {/* Comment List */}
     <View style={{ flex: 1, padding: 20 }}>
+    {!loading && commentList.length === 0 ?  <View style={{justifyContent: 'center', alignItems: 'center'}}><Text>No Comments</Text></View> :
       <FlatList
         data={commentList}
         renderItem={({ item }) => (
@@ -79,6 +80,7 @@ export default function CommentsPage({route}) {
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: 80 }} // Prevents last comment being hidden
       />
+    }
     </View>
 
     {/* Input Bar Fixed at Bottom */}

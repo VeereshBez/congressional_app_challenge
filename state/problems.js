@@ -10,6 +10,10 @@ const problemsSlice = createSlice({
         },
         setProblems: (state, action) => {
             state.splice(0, state.length, ...action.payload);
+        },
+        addLike: (state, action) => {
+            const postIndex = state.findIndex(post => post.id === action.payload.id)
+            state[index] = {...state[index], likes: [action.payload.userId, ...state[index].likes]}
         }
     }
 })
