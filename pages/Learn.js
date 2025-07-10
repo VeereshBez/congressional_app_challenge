@@ -1,11 +1,10 @@
 import {View, Text, StyleSheet, FlatList, ActivityIndicator, Modal} from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import LessonButton from '../components/LessonButton'
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from 'react'
-import { setLessons } from '../state/lessons';
 import { db } from '../firebaseConfig';
-import chapters from '../chapters'
+import chaptersData from '../chapters'
 import AuthButton from '../components/AuthButton';
 import ArrowButton from '../components/ArrowButton';
 
@@ -13,17 +12,18 @@ import ArrowButton from '../components/ArrowButton';
 
 export default function LearnPage() {
     const user = useSelector(state => state.user)
-    const lessons = useSelector(state => state.lesson)
-    const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [chapterIndex, setChapterIndex] = useState(user.currentCourse.number - 1)
+    const [update, setUpdate] = useState(false)
+
+    const [lessons, setLessons] = useState([])
 
     async function getLessons() {
         setLoading(true)
         const q = query(
             collection(db, "lessons"),
-            where("course", "==", chapters[chapterIndex]),
+            where("course", "==", chaptersData[chapterIndex]),
         );
         try {
             setLoading(false)
@@ -33,17 +33,32 @@ export default function LearnPage() {
                 results.push({ id: doc.id, ...doc.data() });
             });
             console.log(results)
-            dispatch(setLessons(results.sort((a, b) => a.num - b.num)))
+            setUpdate(false)
+            return results.sort((a, b) => a.num - b.num)
         } catch(err) {
             console.log(err)
+            setUpdate(false)
         }
     }
 
-    useEffect(async () => {
-        if(lessons.length === 0) {
-            await getLessons()
-        }
-    }, [])
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchData = async () => {
+            const data = await getLessons()
+            if (isMounted) {
+                console.log(data)
+                 setLessons(data)
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            // cleanup function
+            isMounted = false;
+        };
+    }, [chapterIndex])
 
     return (
         <>
@@ -57,7 +72,9 @@ export default function LearnPage() {
             {loading ? <ActivityIndicator style={{alignSelf: 'center'}} /> :
             <FlatList data={lessons} renderItem={({item, index}) => (
                 <View style={{alignSelf: index % 2 === 0 ? 'flex-end' : 'flex-start', margin: 20}} >
-                <LessonButton locked={!((index+1 <= user.currentCourse.currentLesson) || (user.currentCourse.number > chapterIndex+1))} completed={false} onPress={() => {
+                <LessonButton locked={
+                    (!(index+1 <= user.currentCourse.currentLesson) || (user.currentCourse.currentLesson < chapterIndex + 1))
+                } completed={false} onPress={() => {
                     setModalVisible({
                         ...item, 
                         locked: !(index+1 <= 1) || (user.currentCourse > chapterIndex + 1)
@@ -68,12 +85,12 @@ export default function LearnPage() {
         }
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1}}>
             <ArrowButton direction={'back'} disabled={chapterIndex === 0} onPress={() => {
-                setChapterIndex(chapterIndex - 1)
-                getLessons()
+                setChapterIndex(prev => prev - 1)
+                setUpdate(true)
             }} />
-            <ArrowButton direction={'forward'} disabled={chapterIndex === 9}onPress={() => {
-                setChapterIndex(chapterIndex + 1)
-                getLessons()
+            <ArrowButton direction={'forward'} disabled={chapterIndex === 9} onPress={() => {
+                setChapterIndex(prev => prev + 1)
+                setUpdate(true)
             }} />
         </View>
         <Modal         
@@ -87,6 +104,7 @@ export default function LearnPage() {
                         <Text style={{fontWeight: 'bold', fontSize: 20}}>Lesson #{modalVisible.num}: {modalVisible.name}</Text>
                         <Text>{modalVisible.description}</Text>
                         <AuthButton title="Close" onPress={() => setModalVisible(false)} color="black" style={{backgroundColor: 'white'}} />
+                        <AuthButton title="Let's Go!" onPress={() => navigator.navigate('ContentPage', {lesson: modalVisible})} />
                     </View>
                 </View>
             </View>

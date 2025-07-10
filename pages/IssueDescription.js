@@ -104,7 +104,7 @@ export default function IssueDescription({route}) {
                             </View>
                             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', borderTopWidth: 1}}>
                                 <TextInput onChangeText={setComment} value={comment} style={{padding: 20, color: 'grey', width: '80%', borderRadius: 8}} placeholder='Enter Comment' />
-                                <AuthButton disabled={comment.length === 0} title="Submit" onPress={addComment} style={{width: '20%', backgroundColor: 'orange'}} />
+                                <AuthButton disabled={comment.length === 0} title="Submit" onPress={addComment} style={{width: '20%', backgroundColor: comment.length === 0 ? 'grey' : 'orange'}} />
                             </View>
                         </View>
                     </View>

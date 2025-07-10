@@ -1,4 +1,4 @@
-const chapters = [
+const chaptersData = [
     'Introduction To Civics',
     'The Constitution and Founding Principles',
     'Political Systems and Ideologies',
@@ -6,4 +6,4 @@ const chapters = [
     'Local, State, and National Government'
 ]
 
-export default chapters
+export default chaptersData

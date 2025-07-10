@@ -14,8 +14,8 @@ import { setUser } from '../state/user';
 //Login Page
 
 export default function LoginPage({navigation}) {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('veeresh@gmail.com')
+    const [password, setPassword] = useState('123456')
     const[loading, setLoading] = useState(false)
     const [message, setMessage] = useState(null)
 

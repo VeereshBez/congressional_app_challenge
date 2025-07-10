@@ -9,20 +9,17 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { clearUser, userReducer } from './state/user';
 import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
-import LearnPage from './pages/Learn';
 import Profile from './pages/Profile';
 import AuthButton from './components/AuthButton';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import PlayPage from './pages/Play';
 import SettingsPage from './pages/Settings'
 import IssuesPage from './pages/Issues'
-import LeaderboardPage from './pages/Leaderboard';
-import {lessonReducer} from './state/lessons'
 import ReportProblemPage from './pages/ReportProblem';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { problemReducer } from './state/problems';
 import IssueDescription from './pages/IssueDescription';
+import { chaptersReducer } from './state/chapter';
 
 
 const Tab = createBottomTabNavigator();
@@ -33,7 +30,7 @@ const Stack = createNativeStackNavigator()
 const store = configureStore({
   reducer: {
     user: userReducer,
-    lesson: lessonReducer,
+    chapter: chaptersReducer,
     problems: problemReducer
   }
 });
@@ -99,10 +96,7 @@ function MainNavigator() {
         })}
     >
       <Tab2.Screen name="Issues" component={IssuesPage} />
-      <Tab2.Screen name="Learn" component={LearnPage} />
       <Tab2.Screen name="Profile" component={Profile} />
-      <Tab2.Screen name="Play" component={PlayPage} />
-      <Tab2.Screen name="Leaderboard" component={LeaderboardPage} />
       <Tab2.Screen name="Settings" component={SettingsPage} />
     </Tab2.Navigator>
   );
@@ -124,6 +118,7 @@ function AppNavigator() {
     headerTitle: '', // Hides the title
     headerBackTitleVisible: false, // Optional: hides text label next to back button (iOS only)
   }} component={ReportProblemPage} />
+  {/* <Stack.Screen name='ContentPage' options={{headerTitle: '', headerBackVisible: false}} component={ContentPage} /> */}
     <Stack.Screen name="IssueDescription" component={IssueDescription} options={{    headerTitle: '', // Hides the title
     headerBackTitleVisible: false, }} />
     </Stack.Navigator> : <AuthDrawer />;

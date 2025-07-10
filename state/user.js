@@ -13,6 +13,7 @@ const userSlice = createSlice({
         profilePic: null,
         coins: null,
         currentCourse: null,
+        completedLessons: []
     },
     reducers: {
         setUser: (state, action) => {
@@ -24,6 +25,7 @@ const userSlice = createSlice({
             state.profilePic = action.payload.profilePic
             state.currentCourse = action.payload.currentCourse,
             state.coins = action.payload.coins
+            state.completedLessons = action.payload.completedLessons
         },
         changeEmail: (state, action) => {
             state.email = action.payload.email
@@ -48,6 +50,7 @@ const userSlice = createSlice({
             state.date = null
             state.profilePic = null
             state.currentCourse = null
+            state.completedLessons = []
         },
     }
 })
