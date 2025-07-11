@@ -1,6 +1,8 @@
+import { useNavigation } from '@react-navigation/native'
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native'
 
-export default function IssueCard({navigation, item}) {
+export default function IssueCard({item}) {
+    const navigation = useNavigation()
     return (
         <View style={styles.card}>
             <View style={{borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
