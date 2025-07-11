@@ -19,7 +19,8 @@ export default function CommentsPage({route}) {
                     postId: id,
                     userId: user.userId,
                     username: user.username,
-                    date: serverTimestamp()
+                    date: serverTimestamp(),
+                    profilePic: user.profilePic
                 }
                 const commentsCollection = collection(db, "comments")
                 const docRef = await addDoc(commentsCollection, newComment)
@@ -68,7 +69,7 @@ export default function CommentsPage({route}) {
                 marginRight: 20,
               }}
               source={{
-                uri: 'https://tse4.mm.bing.net/th/id/OIP.60CzHo23beRRZ374Vr6iuwHaHa?pid=Api&P=0&h=220',
+                uri: item.profilePic,
               }}
             />
             <View style={{ flexShrink: 1, flex: 1 }}>

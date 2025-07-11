@@ -32,8 +32,9 @@ export default function RegisterPage({navigation}) {
                 email: email,
                 password: password,
                 date: new Date().toDateString(),
-                lessons: [],
                 profilePic: '',
+                lessons: [],
+                profilePic: 'https://tse4.mm.bing.net/th/id/OIP.60CzHo23beRRZ374Vr6iuwHaHa?pid=Api&P=0&h=220',
                 currentCourse: {
                     name: 'Introduction To Civics',
                     number: 1,

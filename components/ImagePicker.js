@@ -12,7 +12,6 @@ export default function ImagePickerComponent(props) {
 
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      alert('Permission to access media library is required!');
       return;
     }
 

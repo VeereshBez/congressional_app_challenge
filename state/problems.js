@@ -13,10 +13,10 @@ const problemsSlice = createSlice({
         },
         addLike: (state, action) => {
             const postIndex = state.findIndex(post => post.id === action.payload.id)
-            state[index] = {...state[index], likes: [action.payload.userId, ...state[index].likes]}
+            state[postIndex] = {...state[postIndex], likes: [action.payload.userId, ...state[postIndex].likes]}
         }
     }
 })
 
-export const {addProblem, setProblems} = problemsSlice.actions
+export const {addProblem, setProblems, addLike} = problemsSlice.actions
 export const problemReducer = problemsSlice.reducer

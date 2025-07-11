@@ -57,6 +57,7 @@ function AuthDrawer() {
 }
 
 function MainNavigator() {
+  const user = useSelector(state => state.user)
   return (
     <Tab2.Navigator initialRouteName='Issues' 
             screenOptions={({ route }) => ({
@@ -97,7 +98,7 @@ function MainNavigator() {
         })}
     >
       <Tab2.Screen name="Issues" component={IssuesPage} />
-      <Tab2.Screen name="Profile" component={Profile} />
+      <Tab2.Screen name="Profile" component={Profile} initialParams={{user}} />
       <Tab2.Screen name="Settings" component={SettingsPage} />
     </Tab2.Navigator>
   );

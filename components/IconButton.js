@@ -2,9 +2,9 @@ import { TouchableOpacity, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
-export default function IconButton({onPress, name, style}) {
+export default function IconButton({onPress, name, style, disabled}) {
     return (
-        <TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
+        <TouchableOpacity disabled={disabled} style={[styles.btn, style, disabled ? {backgroundColor: 'grey'} : {}]} onPress={onPress}>
             <Icon color="white" name={name} size={24} />
         </TouchableOpacity>
     )

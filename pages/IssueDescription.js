@@ -3,10 +3,11 @@ import {View, Text, StyleSheet, Image, ImageBackground, Modal, FlatList, TextInp
 import ArrowButton from '../components/ArrowButton'
 import AuthButton from '../components/AuthButton'
 import { db } from '../firebaseConfig';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, updateDoc, arrayUnio, doc, arrayUnion } from 'firebase/firestore';
 import LoadingPage from '../components/LoadingScreen';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '../components/IconButton';
+import { addLike } from '../state/problems';
 
 //IssueDescription Page
 
@@ -14,8 +15,22 @@ export default function IssueDescription({navigation, route}) {
     const problem = route.params
 
     const [index, setIndex] = useState(0)
+    const [numLikes, setNumLikes] = useState(problem.likes)
+
+    const dispatch = useDispatch()
 
     const user = useSelector(state => state.user)
+
+    async function like() {
+        const issueRef = doc(db, 'problems', problem.id)
+        try {
+            await updateDoc(issueRef, {likes: arrayUnion(user.userId)})
+            dispatch(addLike({id: problem.id, userId: user.userId}))
+            setNumLikes([user.userId, ...numLikes])
+        } catch(error) {
+            console.log(error)
+        }
+    }
 
     return (
         <View style={{flex: 1, backgroundColor: 'white' }}>
@@ -31,20 +46,20 @@ export default function IssueDescription({navigation, route}) {
             </ImageBackground>
             <View style={{margin: 20}}>
                 <Text style={{fontWeight: 'bold', fontSize: 25}}>{problem.title}</Text>
-                <Text style={{ fontStyle: 'italic', marginBottom: 30}}>
+                <Text style={{ fontStyle: 'italic'}}>
                         {problem.annoymous ? 'This issue was submitted anonymously' : `This issue was submitted by ${problem.username}`}
                 </Text>
+                <Text>{numLikes.length}</Text>
+                <TouchableOpacity>
+                    <Text style={{color: 'red',  marginBottom: 30}}>Report This Post</Text>
+                </TouchableOpacity>
             </View>
              <ScrollView style={{margin: 20}}>
                 <Text>{problem.description}</Text>
-
-                <TouchableOpacity>
-                    <Text style={{color: 'red', margin: 20}}>Report This Post</Text>
-                </TouchableOpacity>
             </ScrollView>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', margin: 20}}>
                 <IconButton name="comment" onPress={() => navigation.navigate('CommentsPage', {id: problem.id})} style={{width: '20%'}} />
-                <IconButton name="thumb-up" onPress={() => console.log('hi')} style={{width: '20%', backgroundColor: 'green'}} />
+                <IconButton disabled={numLikes.includes(user.userId)} name="thumb-up" onPress={like} style={{width: '20%', backgroundColor: 'green'}} />
             </View>
         </View>
     )
