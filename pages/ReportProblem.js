@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addProblem } from '../state/problems'
 import { useNavigation } from '@react-navigation/native'
 import { changeCoins } from '../state/user'
+import TownSearchInput from '../components/TownSearchInput'
 
 //Report Problem Page
 
@@ -26,6 +27,9 @@ export default function ReportProblemPage() {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+
+  const [stage, setStage] = useState(1)
+  const [location, setLocation] = useState('')
 
   const [urls, setUrls] = useState([])
 
@@ -47,6 +51,7 @@ export default function ReportProblemPage() {
             description,
             annoymous,
             date: String(date),
+            location,
             photos: urls,
             userId: user.userId,
             username: user.username,
@@ -57,24 +62,17 @@ export default function ReportProblemPage() {
         try {
         var docRef = await addDoc(problemsCollection, newProblem)
         dispatch(addProblem({id: docRef.id, ...newProblem}))
-        dispatch(changeCoins({amount: 5, increase: true}))
         navigation.popToTop();
+        setStage(1)
         } catch(error) {
           console.log(error)
         }
     }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <ScrollView>
-        <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 23 }}>Report A Problem</Text>
-        {showImagePicker ? 
-        <View>
-            <ImagePicker urls={urls} setUrls={setUrls} setReady={setReady} /> 
-            {ready ? <AuthButton title="Submit Issue" onPress={onSubmit} /> : null}
-        </View>
-        :
+    function renderComp() {
+      switch(stage) {
+        case 1:
+          return (
         <View style={{ justifyContent: 'flex-start' }}>
           <Text style={styles.caption}>Title</Text>
           <TextInput onChangeText={setTitle} value={title} style={styles.input} placeholder='Enter meaningful title' />
@@ -92,8 +90,6 @@ export default function ReportProblemPage() {
           <TouchableOpacity onPress={showDatePicker} style={styles.btn}>
             <Text>{date.toDateString()}</Text>
           </TouchableOpacity>
-
-          <Text style={styles.caption}>Location</Text>
 
           <Text style={styles.caption}>Report Annoymously?</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -123,9 +119,32 @@ export default function ReportProblemPage() {
             </TouchableOpacity>
           </View>
 
-          <AuthButton title="Next" onPress={() => setShowImagePicker(true)} />
+          <AuthButton title="Next" onPress={() => setStage(2)} />
         </View>
-        }
+          )
+        case 2:
+          return (
+            <View style={{alignItems: 'center', alignSelf: 'center'}}>
+              <TownSearchInput setLocation={setLocation} location={location} />
+              <AuthButton style={{marginTop: '50%', width: '80%'}} title="Next" onPress={() => setStage(3)} />
+            </View>
+          )
+        case 3: 
+          return (
+          <View>
+            <ImagePicker urls={urls} setUrls={setUrls} setReady={setReady} /> 
+            {ready ? <AuthButton title="Finish" onPress={onSubmit} /> : null}
+        </View>
+          )
+      }
+    }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <ScrollView>
+        <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 23 }}>Report A Problem</Text>                
+          {renderComp()}
         </ScrollView>
       </View>
     </View>

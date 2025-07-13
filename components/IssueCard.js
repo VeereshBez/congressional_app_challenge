@@ -13,6 +13,7 @@ export default function IssueCard({item}) {
                     <Text style={{ fontStyle: 'italic' }}>
                             {item.annoymous ? 'This issue was submitted anonymously' : `This issue was submitted by ${item.username}`}
                     </Text>
+                    <Text>{item.location}</Text>
                     <Text>{item.date.slice(0, 24)}</Text>
                     <Text style={{marginTop: 20}}>{item.description.slice(0, 100)}...</Text>
                     <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('IssueDescription', {...item})}>

@@ -9,7 +9,7 @@ const userSlice = createSlice({
         date: null,
         email: null,
         userId: null,
-        isLoggedIn: false,
+        isLoggedIn: true,
         profilePic: null,
         coins: null,
         currentCourse: null,
