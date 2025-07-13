@@ -38,7 +38,11 @@ export default function LoginPage({navigation}) {
             if(results.length === 0) {
                 setMessage('User Not Found')
             } else {
-                dispatch(setUser(results[0]))
+                if(results[0].active === false) {
+                    setMessage('Account is not active')
+                } else {
+                    dispatch(setUser(results[0]))
+                }
             }
             setEmail('')
             setPassword('')

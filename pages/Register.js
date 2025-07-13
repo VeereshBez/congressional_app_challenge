@@ -40,7 +40,8 @@ export default function RegisterPage({navigation}) {
                     number: 1,
                     currentLesson: 1
                 },
-                coins: 0
+                coins: 0,
+                active: true
             }
             const docRef = await addDoc(usersCollection, newUser);
             dispatch(setUser({id: docRef.id, ...newUser}))

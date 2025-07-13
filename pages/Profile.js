@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Image} from 'react-native'
 import { useSelector } from 'react-redux'
 import AuthButton from '../components/AuthButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { collection, doc, query, updateDoc, where, getDocs } from 'firebase/firestore';
@@ -15,6 +15,20 @@ export default function Profile({route, navigation}) {
     const user = route.params.user
     const currentUser = useSelector(state => state.user)
     const [image, setImage] = useState(null)
+
+    useEffect(() => {
+        async function getUser() {
+            const usersCollection = collection(db, 'users')
+            const q = query(usersCollection, where('id', '==', route.params.user.id))
+            try {
+                const snapshot = await getDoc(q)
+                console.log(snapshot)
+            } catch(error) {
+            
+            }
+        }
+        getUser()
+    })
 
     async function pickImage() {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

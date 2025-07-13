@@ -47,9 +47,10 @@ export default function IssueDescription({navigation, route}) {
             </ImageBackground>
             <View style={{marginHorizontal: 20}}>
                 <Text style={{fontWeight: 'bold', fontSize: 25}}>{problem.title}</Text>
-                <Text style={{ fontStyle: 'italic'}}>
-                        {problem.annoymous ? 'This issue was submitted anonymously' : `This issue was submitted by ${problem.username}`}
-                </Text>
+                {problem.annoymous ? <Text style={{fontStyle: 'italic'}}>This issue is annoymous</Text> : 
+                <Text style={{fontStyle: 'italic'}}>
+                    This issue was submitted by <TouchableOpacity style={{color: 'blue'}} onPress={() => navigation.navigate}><Text>{problem.username}</Text></TouchableOpacity>
+                </Text> }
                 <View style={{display: 'flex', flexDirection: 'row'}}>
                     <Text>{numLikes.length}</Text>
                     <Icon name="thumb-up" style={{marginLeft: 5}} size={20} />

@@ -1,9 +1,17 @@
 import {View, Text, StyleSheet, Touchable, TouchableOpacity, ImageBackground, Image} from 'react-native'
 import AuthButton from '../components/AuthButton'
+import { useEffect } from 'react'
+import axios from 'axios'
 
 //Home Page
 
 export default function HomePage({navigation}) {
+    useEffect(() => {
+        axios.get('https://secure.geonames.org/searchJSON?name_startsWith=bask&country=US&featureClass=P&maxRows=10&username=Veeresh_123').then(response => {
+            console.log(response.json)
+        })
+    })
+
     return (
         <ImageBackground style={styles.layout} source={require('../assets/auth_background.png')} >
         <Image source={require('../assets/home-image.png')} style={{width: '50%', height: '50%', alignSelf: 'center'}} />
