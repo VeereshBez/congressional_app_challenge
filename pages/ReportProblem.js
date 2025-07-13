@@ -50,7 +50,8 @@ export default function ReportProblemPage() {
             photos: urls,
             userId: user.userId,
             username: user.username,
-            likes: []
+            likes: [],
+            reports: []
         }
 
         try {

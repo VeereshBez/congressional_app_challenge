@@ -21,6 +21,7 @@ import { problemReducer } from './state/problems';
 import IssueDescription from './pages/IssueDescription';
 import { chaptersReducer } from './state/chapter';
 import CommentsPage from './pages/CommentsPage';
+import ReportAbusePage from './pages/ReportAbuse';
 
 
 const Tab = createBottomTabNavigator();
@@ -116,6 +117,8 @@ function AppNavigator() {
         },
       }}>
     <Stack.Screen name="Tabs" component={MainNavigator} options={{ headerShown: false }} />
+    <Stack.Screen name="ReportAbuse" component={ReportAbusePage} options={{    headerTitle: '',
+    headerBackTitleVisible: false,}} />
       <Stack.Screen name="ReportProblem"   options={{
     headerTitle: '', // Hides the title
     headerBackTitleVisible: false, // Optional: hides text label next to back button (iOS only)

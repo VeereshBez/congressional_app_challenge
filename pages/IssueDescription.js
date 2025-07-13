@@ -8,6 +8,7 @@ import LoadingPage from '../components/LoadingScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '../components/IconButton';
 import { addLike } from '../state/problems';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 //IssueDescription Page
 
@@ -44,17 +45,22 @@ export default function IssueDescription({navigation, route}) {
                     }} />
                 </View>
             </ImageBackground>
-            <View style={{margin: 20}}>
+            <View style={{marginHorizontal: 20}}>
                 <Text style={{fontWeight: 'bold', fontSize: 25}}>{problem.title}</Text>
                 <Text style={{ fontStyle: 'italic'}}>
                         {problem.annoymous ? 'This issue was submitted anonymously' : `This issue was submitted by ${problem.username}`}
                 </Text>
-                <Text>{numLikes.length}</Text>
-                <TouchableOpacity>
+                <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <Text>{numLikes.length}</Text>
+                    <Icon name="thumb-up" style={{marginLeft: 5}} size={20} />
+                </View>
+                {false ? <AuthButton title="Add Update" /> : 
+                <TouchableOpacity onPress={() => navigation.navigate("ReportAbuse")}>
                     <Text style={{color: 'red',  marginBottom: 30}}>Report This Post</Text>
                 </TouchableOpacity>
+                }
             </View>
-             <ScrollView style={{margin: 20}}>
+             <ScrollView style={{marginHorizontal: 20}}>
                 <Text>{problem.description}</Text>
             </ScrollView>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', margin: 20}}>

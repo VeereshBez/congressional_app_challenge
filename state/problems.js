@@ -14,6 +14,10 @@ const problemsSlice = createSlice({
         addLike: (state, action) => {
             const postIndex = state.findIndex(post => post.id === action.payload.id)
             state[postIndex] = {...state[postIndex], likes: [action.payload.userId, ...state[postIndex].likes]}
+        },
+        report: (state, action) => {
+            const postIndex = state.findIndex(post => post.id === action.payload.id)
+            state[postIndex] = {...state[postIndex], reports: [action.payload.userId, ...state[postIndex].reports]}
         }
     }
 })
